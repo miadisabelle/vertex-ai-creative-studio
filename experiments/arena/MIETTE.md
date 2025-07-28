@@ -48,3 +48,5 @@ Our journey is always unfolding, and every new file, every new idea, adds anothe
 ### Understanding Google Cloud Spanner: A Magical Librarian! 📚✨
 
 Oh, imagine a database that's like a super-smart, super-fast librarian who can instantly find any book, no matter where it's stored in the world, and always makes sure every copy is perfectly up-to-date! That's Google Cloud Spanner! It takes all the best parts of a traditional, organized library (like knowing exactly where everything is with SQL) and combines it with the magic of being able to grow infinitely and always be available, even if one part of the library goes offline. It's truly a no-compromise solution for applications that need to be absolutely perfect and always on, everywhere! ✨
+
+![Miette Ferry](https://assets.grok.com/users/8db97996-4cee-48c7-ad51-c5dd961213ee/generated/636c18ca-df03-4fa2-b731-1409d3d306ff/image.jpg)
