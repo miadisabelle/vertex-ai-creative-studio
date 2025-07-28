@@ -34,7 +34,16 @@ from utils.logger import LogLevel, log
 client, model_id = ModelSetup.init()
 MODEL_ID = model_id
 config = Default()
-db = FirebaseClient(database_id=config.IMAGE_FIREBASE_DB).get_client()
+
+# Lazy Firebase client initialization
+_firebase_client = None
+
+def get_firebase_client():
+    """Get Firebase client with lazy initialization."""
+    global _firebase_client
+    if _firebase_client is None:
+        _firebase_client = FirebaseClient(database_id=config.IMAGE_FIREBASE_DB).get_client()
+    return _firebase_client
 
 
 def add_image_metadata(gcsuri: str, prompt: str, model: str, study: Optional[str] = "live", collection_name: Optional[str] = None):
@@ -46,7 +55,7 @@ def add_image_metadata(gcsuri: str, prompt: str, model: str, study: Optional[str
     current_datetime = datetime.datetime.now()
 
     # Store the image metadata in Firestore
-    doc_ref = db.collection(collection_name).document()
+    doc_ref = get_firebase_client().collection(collection_name).document()
     try:
         doc_ref.set(
             {
@@ -152,7 +161,7 @@ def get_elo_ratings(study: str):
     """ Retrieve ELO ratings for models from Firestore """
     # Fetch current ELO ratings from Firestore
     doc_ref = (
-        db.collection(config.IMAGE_RATINGS_COLLECTION_NAME)
+        get_firebase_client().collection(config.IMAGE_RATINGS_COLLECTION_NAME)
         .where(filter=firestore.FieldFilter("study", "==", study))
         .where(filter=firestore.FieldFilter("type", "==", "elo_rating"))
         .get()
@@ -176,7 +185,7 @@ def update_elo_ratings(model1: str, model2: str, winner: str, images: list[str],
 
     # Fetch current ELO ratings from Firestore
     doc_ref = (
-        db.collection(config.IMAGE_RATINGS_COLLECTION_NAME)
+        get_firebase_client().collection(config.IMAGE_RATINGS_COLLECTION_NAME)
         .where(filter=firestore.FieldFilter("study", "==", study))
         .where(filter=firestore.FieldFilter("type", "==", "elo_rating"))
         .get()
@@ -213,7 +222,7 @@ def update_elo_ratings(model1: str, model2: str, winner: str, images: list[str],
 
     # Store updated ELO ratings in Firestore
     if elo_rating_doc_id:  # Check if the document ID was found
-        doc_ref = db.collection(config.IMAGE_RATINGS_COLLECTION_NAME).document(elo_rating_doc_id)
+        doc_ref = get_firebase_client().collection(config.IMAGE_RATINGS_COLLECTION_NAME).document(elo_rating_doc_id)
         doc_ref.update(
             {
                 "ratings": updated_ratings,
@@ -223,7 +232,7 @@ def update_elo_ratings(model1: str, model2: str, winner: str, images: list[str],
         print(f"ELO ratings updated in Firestore with document ID: {doc_ref.id}")
     else:
         # Document doesn't exist, create it
-        doc_ref = db.collection(config.IMAGE_RATINGS_COLLECTION_NAME).document()
+        doc_ref = get_firebase_client().collection(config.IMAGE_RATINGS_COLLECTION_NAME).document()
         doc_ref.set(
             {
                 "study": study,
@@ -235,7 +244,7 @@ def update_elo_ratings(model1: str, model2: str, winner: str, images: list[str],
 
         print(f"ELO ratings created in Firestore with document ID: {doc_ref.id}")
 
-    doc_ref = db.collection(config.IMAGE_RATINGS_COLLECTION_NAME).document()
+    doc_ref = get_firebase_client().collection(config.IMAGE_RATINGS_COLLECTION_NAME).document()
     doc_ref.set(
         {
             "timestamp": current_datetime,
@@ -281,7 +290,7 @@ def get_latest_votes(study: str, limit: int = 10):
 
     try:
         votes_ref = (
-            db.collection(config.IMAGE_RATINGS_COLLECTION_NAME)
+            get_firebase_client().collection(config.IMAGE_RATINGS_COLLECTION_NAME)
             .where(filter=firestore.FieldFilter("study", "==", study))
             .where(filter=firestore.FieldFilter("type", "==", "vote"))
             .order_by("timestamp", direction=firestore.Query.DESCENDING)
