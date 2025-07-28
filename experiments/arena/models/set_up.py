@@ -26,11 +26,13 @@ config = Default()
 def load_default_models() -> list[str]:
     """Load available image generation models.
     
-    Note: Imagen models are not available in us-central1 region.
-    For now, we'll use Gemini models which support image generation.
+    Using actual Imagen models available in Vertex AI Media Studio.
     """
-    # Only include Gemini models since Imagen models aren't available in us-central1
-    IMAGE_GEN_MODELS = [config.MODEL_GEMINI2]
+    # Include actual Imagen models that are available
+    IMAGE_GEN_MODELS = [
+        config.MODEL_IMAGEN3_FAST,  # imagen-3.0-fast-generate-001
+        config.MODEL_IMAGEN3,       # imagen-3.0-generate-002
+    ]
     
     # Add Model Garden models if configured
     if config.MODEL_FLUX1_ENDPOINT_ID:

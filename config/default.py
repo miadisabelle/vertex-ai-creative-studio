@@ -51,11 +51,11 @@ class Config:
     PROJECT_ID = os.environ.get("PROJECT_ID", "")
     LOCATION = os.getenv("LOCATION", "us-central1")
     MODEL_GEMINI_MULTIMODAL = "gemini-2.0-flash"
-    # Note: Image generation models not available in us-central1, using Gemini for text-to-image
-    MODEL_IMAGEN2 = "gemini-2.0-flash"
-    MODEL_IMAGEN_NANO = "gemini-2.0-flash"
-    MODEL_IMAGEN3_FAST = "gemini-2.0-flash"
-    MODEL_IMAGEN3 = "gemini-2.0-flash"
+    # Available Imagen models from Vertex AI Media Studio
+    MODEL_IMAGEN2 = "imagegeneration@006"
+    MODEL_IMAGEN_NANO = "imagegeneration@004"
+    MODEL_IMAGEN3_FAST = "imagen-3.0-fast-generate-001"
+    MODEL_IMAGEN3 = "imagen-3.0-generate-002"
     TEMPERATURE = 0.8
     TOP_P = 0.97
     TOP_K = 40
@@ -75,8 +75,8 @@ class Config:
     )
     display_image_models: list[ImageModel] = field(
         default_factory=lambda: [
-            {"display": "Gemini 2.0 Flash (Text-to-Image)", "model_name": Config.MODEL_IMAGEN3_FAST},
-            {"display": "Gemini 2.0 Flash (Alternative)", "model_name": Config.MODEL_IMAGEN3},
+            {"display": "Imagen 3 Fast", "model_name": Config.MODEL_IMAGEN3_FAST},
+            {"display": "Imagen 3", "model_name": Config.MODEL_IMAGEN3},
         ]
     )
 

@@ -113,7 +113,8 @@ def on_select_image_count(e: me.SelectSelectionChangeEvent):
 def generate_images(input_txt: str):
     """Generate Images"""
     state = me.state(State)
-
+    cfg = Config()
+    
     # handle condition where someone hits "random" but doens't modify
     if not input_txt and state.image_prompt_placeholder:
         input_txt = state.image_prompt_placeholder
