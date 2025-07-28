@@ -11,7 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 from typing import Optional
+
+from models.coaia_integration import COAIAModelManager
 from dotenv import load_dotenv
 from google import genai
 import threading
@@ -27,6 +30,27 @@ def load_default_models() -> list[str]:
     if config.MODEL_STABLE_DIFFUSION_ENDPOINT_ID:
         IMAGE_GEN_MODELS.append(config.MODEL_STABLE_DIFFUSION)
     return IMAGE_GEN_MODELS
+
+
+# ---------------------------------------------------------------------------
+# Text models (Gemini + COAIA)                                               
+# ---------------------------------------------------------------------------
+
+
+def load_text_models() -> list[str]:
+    """Return list of text-generation capable model identifiers.
+
+    The arena's forthcoming *text_arena* page relies on this helper to pick
+    two random models for every battle.  We keep Gemini as baseline and append
+    every COAIA model discovered by the *COAIAModelManager* utility.
+    """
+
+    TEXT_MODELS: list[str] = [config.MODEL_GEMINI2]
+
+    # Add every COAIA model managed by the integration layer.
+    TEXT_MODELS.extend(COAIAModelManager.get_available_models())
+
+    return TEXT_MODELS
 
 
 class ModelSetup:
