@@ -51,9 +51,9 @@ class Config:
     PROJECT_ID = os.environ.get("PROJECT_ID", "")
     LOCATION = os.getenv("LOCATION", "us-central1")
     MODEL_GEMINI_MULTIMODAL = "gemini-2.0-flash"
-    MODEL_IMAGEN2 = "imagegeneration@006"
-    MODEL_IMAGEN_NANO = "imagegeneration@004"
-    # Note: Imagen models not available in us-central1, using Gemini for image generation
+    # Note: Image generation models not available in us-central1, using Gemini for text-to-image
+    MODEL_IMAGEN2 = "gemini-2.0-flash"
+    MODEL_IMAGEN_NANO = "gemini-2.0-flash"
     MODEL_IMAGEN3_FAST = "gemini-2.0-flash"
     MODEL_IMAGEN3 = "gemini-2.0-flash"
     TEMPERATURE = 0.8
@@ -75,8 +75,8 @@ class Config:
     )
     display_image_models: list[ImageModel] = field(
         default_factory=lambda: [
-            {"display": "Gemini 2.0 Flash", "model_name": Config.MODEL_IMAGEN3_FAST},
-            {"display": "Gemini 2.0 Flash (Alt)", "model_name": Config.MODEL_IMAGEN3},
+            {"display": "Gemini 2.0 Flash (Text-to-Image)", "model_name": Config.MODEL_IMAGEN3_FAST},
+            {"display": "Gemini 2.0 Flash (Alternative)", "model_name": Config.MODEL_IMAGEN3},
         ]
     )
 
