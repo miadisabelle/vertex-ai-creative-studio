@@ -24,11 +24,20 @@ load_dotenv(override=True)
 config = Default()
 
 def load_default_models() -> list[str]:
-    IMAGE_GEN_MODELS = [config.MODEL_IMAGEN2, config.MODEL_IMAGEN3_FAST, config.MODEL_IMAGEN3, config.MODEL_IMAGEN32,]
+    """Load available image generation models.
+    
+    Note: Imagen models are not available in us-central1 region.
+    For now, we'll use Gemini models which support image generation.
+    """
+    # Only include Gemini models since Imagen models aren't available in us-central1
+    IMAGE_GEN_MODELS = [config.MODEL_GEMINI2]
+    
+    # Add Model Garden models if configured
     if config.MODEL_FLUX1_ENDPOINT_ID:
         IMAGE_GEN_MODELS.append(config.MODEL_FLUX1)
     if config.MODEL_STABLE_DIFFUSION_ENDPOINT_ID:
         IMAGE_GEN_MODELS.append(config.MODEL_STABLE_DIFFUSION)
+    
     return IMAGE_GEN_MODELS
 
 
