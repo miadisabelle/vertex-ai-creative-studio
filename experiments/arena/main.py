@@ -20,6 +20,7 @@ from pages.arena import arena_page_content
 from pages.leaderboard import leaderboard_page_content
 from pages.history import history_page_content
 from pages.settings import settings_page_content
+from pages.text_arena import text_arena_page_content
 
 # from pages.gemini2 import gemini_page_content
 
@@ -79,6 +80,23 @@ def history_page():
 def settings_page():
     """Another Page"""
     settings_page_content(me.state(AppState))
+
+
+# ---------------------------------------------------------------------------
+# Text generation arena page
+# ---------------------------------------------------------------------------
+
+
+@me.page(
+    path="/text-arena",
+    title="Arena - Text Generation",
+    on_load=on_load,
+    security_policy=me.SecurityPolicy(dangerously_disable_trusted_types=True),
+)
+def text_arena_page():
+    """Text generation battle arena"""
+    with page_scaffold():  # Reuse scaffold for consistent layout
+        text_arena_page_content()
 
 
 # @me.page(
